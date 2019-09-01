@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
@@ -31,7 +30,7 @@
             <span ng-bind="totalTime | secondToMinute"></span>
         </div>
         <div class="pull-right btn-drakgreen" ng-show="isPaperPage" ng-click="checkSubmit()">交卷</div>
-        <div class="pull-right btn-drakgreen" ng-click="history.go(-1)">返回</div>
+        <div class="pull-right btn-drakgreen" ng-click="goBack()">返回</div>
     </header>
     <article class="content" ng-show="isPaperPage" style="height: 100%">
         <div class = "question-box">

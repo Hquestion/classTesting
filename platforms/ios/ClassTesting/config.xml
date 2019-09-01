@@ -28,13 +28,14 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
-    <access origin="www.51jyfw.com" />
+    <access origin="http://www.51jyfw.com" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <allow-navigation href="http://www/51jyfw.com" />
     <allow-intent href="itms:*" />
     <allow-intent href="itms-apps:*" />
     <preference name="AllowInlineMediaPlayback" value="false" />

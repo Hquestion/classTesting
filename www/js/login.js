@@ -24,14 +24,13 @@ var vm = new Vue({
                     withCredentials: true
                 },
             }).then(function(res) {
-                console.log(res);
                 if (res.fid) {
                     localStorage.setItem('name', self.name);
                     localStorage.setItem('password', self.password);
                     localStorage.setItem('user', JSON.stringify(res));
                     document.cookie = 'userId=' + res.SelfName;
                     // 跳转列表页面
-                    // location.href = './examList.html';
+                    location.href = './examList.html';
                 } else {
                     localStorage.removeItem('name');
                     localStorage.removeItem('password');

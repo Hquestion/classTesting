@@ -3,7 +3,10 @@
  */
 var myApp = angular.module('machineEvaApp', [
     'paperService', 'Util', 'ngDialog'
-]).controller('machineEvaController', ['$scope', '$http', '$location', 'paperService', 'ngDialog', function ($scope, $http, $location, paperService, ngDialog) {
+]).config(function ($httpProvider) {
+    $httpProvider.defaults.withCredentials = true;
+})
+    .controller('machineEvaController', ['$scope', '$http', '$location', 'paperService', 'ngDialog', function ($scope, $http, $location, paperService, ngDialog) {
     var search = $location.search();
     var href = search.from.slice(0, search.from.indexOf('#/'));
     var examId = search.examId,
@@ -286,6 +289,9 @@ var myApp = angular.module('machineEvaApp', [
         });
     }
 
+    $scope.goBack = function() {
+        history.go(-1);
+    };
     /*
      * 页面下方可以直接点击试题号跳转到所选试题
      * */

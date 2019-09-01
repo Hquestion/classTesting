@@ -9,25 +9,70 @@
     <link rel="stylesheet" type="text/css" href="./bower_components/font-awesome/css/font-awesome.min.css">
     <script src="./bower_components/vue.min.js"></script>
     <script src="./bower_components/jquery/jquery.min.js"></script>
+    <script src="./bower_components/underscore/underscore-min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        #app {
+            width: 100vw;
+            height: auto;
+        }
+        #app .item {
+            width: 80vw;
+            padding: 20px;
+            margin: 20px auto 0;
+            border: 1px solid #dedede;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-direction: row;
+            border-radius: 5px;
+        }
+        .exam-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        .exam-status {
+            color: #999;
+            margin-top: 8px;
+        }
+        .exam-btn .btn {
+            width: auto;
+            padding: 10px 20px;
+            text-align: center;
+            line-height: 1.25;
+            background: #41b29c;
+            border-radius: 5px;
+            color: #fff;
+        }
+        .no-data {
+            text-align: center;
+            padding-top: 40vh;
+
+        }
+    </style>
 </head>
 <body>
 <div id="app">
     <div class="item" v-for="(paper, index) in examList" :key="index">
         <div>
             <div class="exam-name">{{paper.examName}}</div>
-            <div class="exam-name">
-                <div v-if="!paper.isBegin && paper.status === 0" class="text-green" style="color: #8092A0"><i
-                        class="fa fa-check-circle-o"></i>未开始
+            <div class="exam-status">
+                <div v-if="!paper.isBegin && paper.status === 0" class="text-green" style="color: #8092A0">未开始
                 </div>
-                <div v-if="paper.isBegin && paper.status === 0" class="text-green"><i class="fa fa-check-circle-o"></i>测验中
+                <div v-if="paper.isBegin && paper.status === 0" class="text-green">测验中
                 </div>
-                <div v-if="paper.status === 1" class="text-warning"><i class="fa  fa-edit"></i>已测验</div>
+                <div v-if="paper.status === 1" class="text-warning">已测验</div>
             </div>
         </div>
-        <div>
+        <div class="exam-btn">
             <div class="status" v-if="!paper.isBegin && paper.status === 0">未开始</div>
             <div class="status" v-if="paper.isBegin && paper.status === 0 && paper.isfinish">等待收卷</div>
-            <div class="status btn" v-if="paper.isBegin && paper.status === 0 && !paper.isfinish">开始测验</div>
+            <div class="status btn" v-if="paper.isBegin && paper.status === 0 && !paper.isfinish" @click="startExam(paper)">开始测验</div>
             <div class="status" v-if="paper.status !== 0 && paper.exAnswerFlnkID === null">缺考</div>
         </div>
 
@@ -41,22 +86,36 @@
         el: '#app',
         data() {
             return {
-                examList: []
+                examList: [],
+                loading: true
             };
         },
         methods: {
             getExamList() {
                 var self = this;
-                $.get('http://www.51jyfw.com/BootStrap/Interface/Interface0285.ashx', {exType: '机房评测'})
-                    .then(function (res) {
-                        if(!_.isArray(res.data.msg)) {
+                this.loading = true;
+                $.ajax('http://www.51jyfw.com/BootStrap/Interface/Interface0285.ashx', {
+                    data: {exType: '机房评测'},
+                    crossDomain: true,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    dataType: 'json',
+                    contentType: 'application/json'
+                }).then(function (res) {
+                        if(!_.isArray(res.msg)) {
                             self.examList = [];
                             return;
                         }
-                        $.get('http://www.51jyfw.com/BootStrap//Interface/getSysTime.ashx')
+                        $.ajax('http://www.51jyfw.com/BootStrap//Interface/getSysTime.ashx',{
+                            crossDomain: true,
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                        })
                             .then(function (resp) {
-                                var sysTime = resp.data;
-                                self.examList = _.map(res.data.msg, function (item) {
+                                var sysTime = resp;
+                                self.examList = _.map(res.msg, function (item) {
                                     var isBegin = false, remaintime;
                                     if (sysTime <= item.StopTime) {
                                         if (sysTime >= item.ExamTime) {
@@ -92,8 +151,34 @@
                                         isfinish: item.isfinish
                                     }
                                 });
+                                self.loading = false;
+                            }, function() {
+                                self.loading = false;
                             });
                     })
+            },
+            startExam(paper) {
+                $.ajax('http://www.51jyfw.com/BootStrap/student/StartExam.ashx',{
+                    data: JSON.stringify({
+                        taskFLnkId: paper.FLnkID
+                    }),
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    crossDomain: true,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+
+                }).then(function(res){
+                    if(res.code === 0){
+                        location.href = './startRoomEvaluating/startMachineEva.html#/?examId=' + paper.examFId +'&taskFlnkid='+ paper.FLnkID + '&exType=机房评测&from=' + location.href+'&isOpenNewWin=1';
+                    }else {
+                        alert(res.msg);
+                    }
+                }, function(e) {
+                    alert(JSON.stringify(e));
+                });
             }
         },
         mounted() {

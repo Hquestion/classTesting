@@ -1,0 +1,16 @@
+<div class="content-box">
+    <div class="tip-img"></div>
+    <div class="scored"><div class="left-tip">你的得分是</div><div class="mid-points" ng-bind="totalScore"></div><div class="right-tip">分</div></div>
+    <!--<div class="qst-resultList"><div class="col-md-1"><span class="correct-tip">答对:</span><span class="num-correct" ng-bind="correctTotalNum + '题'"></span></div><div class="col-md-1"><span class="wrong-tip">答错:</span><span class="num-wrong" ng-bind="wrongTotalNum +'题'"></span></div><div class="col-md-1"><span class="undo-tip">漏答:</span><span class="num-undo" ng-bind="unDo+'题'"></span></div></div>-->
+    <div class="row">
+        <div class="col-md-4">答对:<span class="num-correct" ng-bind="correctTotalNum + '题'"></span></div>
+        <div class="col-md-4">答错:<span class="num-wrong" ng-bind="wrongTotalNum +'题'"></span></div>
+        <div class="col-md-4">漏答:<span class="num-undo" ng-bind="unDo+'题'"></span></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" ng-bind="'用时: '+ totalSpendTime"></div>
+    </div>
+    <div class="button-box">
+        <button class="known-btn btn" ng-click="toWaitPage()">确认</button>
+    </div>
+</div>
