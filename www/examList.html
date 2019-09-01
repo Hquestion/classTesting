@@ -10,13 +10,49 @@
     <script src="./bower_components/vue.min.js"></script>
     <script src="./bower_components/jquery/jquery.min.js"></script>
     <script src="./bower_components/underscore/underscore-min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        #app {
+            width: 100vw;
+            height: auto;
+        }
+        #app .item {
+            width: 80vw;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid #dedede;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-direction: column;
+        }
+        .exam-btn {
+
+        }
+        .exam-btn .btn {
+            width: auto;
+            padding: 10px 20px;
+            text-align: center;
+            line-height: 1.25;
+            background: #41b29c;
+        }
+        .no-data {
+            text-align: center;
+            padding-top: 40vh;
+
+        }
+    </style>
 </head>
 <body>
 <div id="app">
     <div class="item" v-for="(paper, index) in examList" :key="index">
         <div>
             <div class="exam-name">{{paper.examName}}</div>
-            <div class="exam-name">
+            <div class="exam-status">
                 <div v-if="!paper.isBegin && paper.status === 0" class="text-green" style="color: #8092A0"><i
                         class="fa fa-check-circle-o"></i>未开始
                 </div>
@@ -25,7 +61,7 @@
                 <div v-if="paper.status === 1" class="text-warning"><i class="fa  fa-edit"></i>已测验</div>
             </div>
         </div>
-        <div>
+        <div class="exam-btn">
             <div class="status" v-if="!paper.isBegin && paper.status === 0">未开始</div>
             <div class="status" v-if="paper.isBegin && paper.status === 0 && paper.isfinish">等待收卷</div>
             <div class="status btn" v-if="paper.isBegin && paper.status === 0 && !paper.isfinish">开始测验</div>
