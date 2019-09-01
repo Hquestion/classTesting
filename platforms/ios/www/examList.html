@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+    <link rel="stylesheet" type="text/css" href="./bower_components/font-awesome/css/font-awesome.min.css">
+    <script src="./bower_components/vue.min.js"></script>
+    <script src="./bower_components/jquery/jquery.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <div class="item" v-for="(paper, index) in examList" :key="index">
+        <div>
+            <div class="exam-name">{{paper.examName}}</div>
+            <div class="exam-name">
+                <div v-if="!paper.isBegin && paper.status === 0" class="text-green" style="color: #8092A0"><i
+                        class="fa fa-check-circle-o"></i>未开始
+                </div>
+                <div v-if="paper.isBegin && paper.status === 0" class="text-green"><i class="fa fa-check-circle-o"></i>测验中
+                </div>
+                <div v-if="paper.status === 1" class="text-warning"><i class="fa  fa-edit"></i>已测验</div>
+            </div>
+        </div>
+        <div>
+            <div class="status" v-if="!paper.isBegin && paper.status === 0">未开始</div>
+            <div class="status" v-if="paper.isBegin && paper.status === 0 && paper.isfinish">等待收卷</div>
+            <div class="status btn" v-if="paper.isBegin && paper.status === 0 && !paper.isfinish">开始测验</div>
+            <div class="status" v-if="paper.status !== 0 && paper.exAnswerFlnkID === null">缺考</div>
+        </div>
+
+    </div>
+    <div class="no-data" v-if="!examList || !examList.length">
+        暂无评测！
+    </div>
+</div>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data() {
+            return {
+                examList: []
+            };
+        },
+        methods: {
+            getExamList() {
+                var self = this;
+                $.get('http://www.51jyfw.com/BootStrap/Interface/Interface0285.ashx', {exType: '机房评测'})
+                    .then(function (res) {
+                        if(!_.isArray(res.data.msg)) {
+                            self.examList = [];
+                            return;
+                        }
+                        $.get('http://www.51jyfw.com/BootStrap//Interface/getSysTime.ashx')
+                            .then(function (resp) {
+                                var sysTime = resp.data;
+                                self.examList = _.map(res.data.msg, function (item) {
+                                    var isBegin = false, remaintime;
+                                    if (sysTime <= item.StopTime) {
+                                        if (sysTime >= item.ExamTime) {
+                                            isBegin = true;
+                                            if (item.aflnkid === undefined) {
+                                                if (item.SpendTime === 0) {
+                                                    var StopTime = new Date(item.StopTime),
+                                                        ExamTime = new Date(item.ExamTime);
+                                                    remaintime = Math.ceil(StopTime.getTime() - ExamTime.getTime()) / 1000 / 60;
+                                                } else {
+                                                    remaintime = item.SpendTime;
+                                                }
+                                            } else if (item.isfinish) {
+                                                remaintime = '0';
+                                            } else {
+                                                remaintime = item.remaintime;
+                                            }
+                                        }
+                                    } else {
+                                        item.status = 1;
+                                    }
+                                    return {
+                                        examFId: item.ExExamFLnkID,
+                                        FLnkID: item.FLnkID,
+                                        examName: item.TaskName,
+                                        status: item.status,
+                                        exAnswerFlnkID: item.aflnkid,
+                                        ExamTime: item.ExamTime,
+                                        StopTime: item.StopTime,
+                                        finishdate: item.finishdate,
+                                        remaintime: remaintime,
+                                        isBegin: isBegin,
+                                        isfinish: item.isfinish
+                                    }
+                                });
+                            });
+                    })
+            }
+        },
+        mounted() {
+            this.getExamList();
+        }
+    })
+</script>
+</body>
+</html>

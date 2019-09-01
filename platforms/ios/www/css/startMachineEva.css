@@ -1,0 +1,306 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html, body{
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    font-size: 21px;
+    font-family: "微软雅黑", 'microsoft yahei','Microsoft YaHei';
+}
+.clearfix:after {
+    content: '\20';
+    clear: both;
+    display: block;
+}
+header {
+    background: #41b29c;
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    color: #fff;
+    padding: 0 20px;
+    text-align: center;
+}
+.text-orange{
+    color: orange;
+}
+section {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+.timer{
+    min-width: 200px;
+    margin: auto;
+    text-align: center;
+    height: 50px;
+    display: inline-block;
+}
+.clock {
+    display: inline-block;
+    width: 21px;
+    height: 21px;
+    background: url(../assets/images/clock.png) no-repeat;
+}
+.btn-drakgreen {
+    width: 100px;
+    height: 35px;
+    line-height: 35px;
+    background: #308574;
+    font-size: 18px;
+    color: #fff;
+    font-family: "微软雅黑", 'microsoft yahei','Microsoft YaHei';
+    cursor: pointer;
+    border: 1px solid #308574;
+    border-radius: 35px;
+    display: inline-block;
+    margin-left: 10px;
+    margin-top: 7px;
+}
+
+
+article {
+    width: 100%;
+    min-height: calc(100% - 100px);
+    background: #fff;
+    font-size: 24px;
+}
+
+.curQstNo{
+    width: 54px;
+    height: 33px;
+    color: #ffffff;
+    font-size: 20px;
+    line-height: 33px;
+    background:url(../assets/images/group-1.png) no-repeat;
+    margin-right: 20px;
+    text-align: center;
+}
+.question-content{
+    width: calc(100% - 54px);
+}
+.question-box{
+    height: 65%;
+    overflow-y: auto;
+    display: flex;
+    padding: 10px 0;
+    margin-top: 50px;
+}
+.options{
+    margin-top: 60px;
+}
+/*    选择题选项展示    */
+.options .option {
+    margin-top: 5px;
+}
+.options .option:after{
+    content: '\20';
+    display: block;
+    clear: both;
+}
+.options .option > *{
+    /*float: left;*/
+    /*display: -webkit-box;*/
+    width: 90%;
+}
+.options .option .inline-box {
+    width: calc(100% - 45px);
+    display: inline;
+    float: left;
+}
+.options.style-1 .option{
+    width: 100%;
+    float: left;
+}
+.options.style-2 .option{
+    width: 50%;
+    float: left;
+}
+.options.style-3 .option{
+    width: 25%;
+    float: left;
+}
+/*-------------------*/
+.flip-box{
+    text-align: center;
+    /*padding-top: 200px;*/
+    padding-bottom: 5px;
+    border-bottom: #dedede 1px solid;
+    color: #fff;
+    font-size: 16px;
+}
+.pre{
+    font-size: 16px;
+    margin-right: 5px;
+}
+.next{
+    font-size: 16px;
+    margin-left: 5px;
+}
+.btn-51-green{
+    background-color: #41B39C;
+}
+.btn-51-orange{
+    background-color: #ffab4e;
+}
+.btn-51-gray{
+    background-color: #d2d2d2;
+    cursor: default;
+}
+.btn-border{
+    border: #d2d2d2 1px solid;
+    padding: 5px 20px;
+    cursor: pointer;
+}
+.options .option .btn-border span{
+    /*display: inline;*/
+    float: left;
+}
+.fastNumList{
+    font-size: 14px;
+    width: 35px;
+    height: 35px;
+    background-color: transparent;
+    border: #d2d2d2 1px solid;
+    margin: 0px 5px;
+    cursor: pointer;
+}
+.stu-done{
+    background-color: #ffab4e;
+    color: #ffffff;
+}
+.stu-undo{
+    background-color: transparent;
+    color: #737373;
+}
+.stu-choosen{
+    border-color: #35a58f;
+    /*border-width: 3px;*/
+    color: #41B39C;
+}
+.stu-unchoose{
+    border-color: #d2d2d2;
+}
+.fastQstBox{
+    margin-top: 35px;
+}
+/*----------ngDialog's_Tip----------------*/
+.ngdialog.ngdialog-theme-default .ngdialog-content{
+    background-color: #f2fefa;
+    border-radius: 0px;
+}
+.ngdialog.ngdialog-theme-default .ngdialog-content .content-box{
+    text-align: center;
+    padding-top: 82px;
+}
+.ngdialog.ngdialog-theme-default .ngdialog-content .content-box .tip-img{
+    width: 111px;
+    height: 105px;
+    background: url(../../assets/images/paper-tip.png) no-repeat;
+    margin: auto;
+}
+.ngdialog.ngdialog-theme-default .ngdialog-content .content-box .tip-content{
+    margin-top: 57px;
+    margin-bottom: 140px;
+}
+.ngdialog.ngdialog-theme-default .ngdialog-content .content-box .button-box{
+    color:#ffffff;
+}
+.ngdialog.ngdialog-theme-default .ngdialog-content .content-box .button-box .carryon-btn{
+    width: 152px;
+    height: 42px;
+    border-radius: 19px;
+    background-color: #ffab4e;
+    outline: none;
+    font-size: 21px;
+    color: #ffffff;
+    margin-right: 18px;
+}
+.ngdialog.ngdialog-theme-default .ngdialog-content .content-box .button-box .cancel-btn{
+    width: 152px;
+    height: 42px;
+    border-radius: 19px;
+    background-color: #41B39C;
+    outline: none;
+    font-size: 21px;
+    color: #ffffff;
+    margin-left: 18px;
+}
+/*------------------------------------*/
+/*---------ngDialog's_Result----------*/
+.ngdialog.ngdialog-theme-default .ngdialog-content .content-box .scored{
+    margin: 29px auto 90px auto;
+    color: #585858;
+    font-size: 18px;
+}
+.ngdialog.ngdialog-theme-default .ngdialog-content .content-box .left-tip{
+    display: inline-block;
+    font-size: 22px;
+    margin-right: 6px;
+}
+.ngdialog.ngdialog-theme-default .ngdialog-content .content-box .right-tip{
+    font-size: 28px;
+    display: inline-block;
+    margin-left: 6px;
+}
+.ngdialog.ngdialog-theme-default .ngdialog-content .content-box .mid-points{
+    font-size: 47px;
+    display: inline-block;
+}
+.ngdialog.ngdialog-theme-default .ngdialog-content .content-box .row{
+    font-size: 18px;
+    text-align: left;
+}
+.ngdialog.ngdialog-theme-default .ngdialog-content .content-box .row span{
+    color: #ffab4e;
+    margin-left: 8px;
+}
+.ngdialog.ngdialog-theme-default .ngdialog-content .content-box .button-box .known-btn{
+    margin-top: 36px;
+    width: 152px;
+    height: 42px;
+    border-radius: 19px;
+    background-color: #ffab4e;
+    outline: none;
+    font-size: 21px;
+    color: #ffffff;
+}
+/*------------------------------------*/
+.wait-page{
+    text-align: center;
+    padding-top: 168px;
+}
+.wait-page .wait-img{
+    width: 111px;
+    height: 105px;
+    background: url(../assets/images/paper-tip.png) no-repeat;
+    margin: auto;
+}
+.wait-box{
+}
+.no-option-hack {
+    width: 100%;
+    padding: 20px;
+    margin-left: -27px;
+}
+.no-option-hack .btn-option {
+    width: 21.25%;
+    padding: 10px 20px;
+    border: 1px solid #dedede;
+    background: #fff;
+    cursor: pointer;
+    float: left;
+    margin-left: 5%;
+    text-align: center;
+    color: #737373;
+}
+.no-option-hack .btn-option:first-child {
+    margin-left: 0;
+}
+.no-option-hack .btn-option.stu-choosen {
+    border: 2px solid #41b39c;
+    color: #41B39C;
+}

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+    <title>机房评测</title>
+    <link rel="stylesheet" href="../bower_components/ngDialog/ngDialog.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../bower_components/ngDialog/ngDialog-theme-default.min.css">
+    <link rel="stylesheet" href="../bower_components/bootstrap-3.3.4/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../bower_components/font-awesome/css/font-awesome.min.css">
+    <link href="../css/startMachineEva.css?ver=1.4.9" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="../bower_components/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../bower_components/underscore/underscore-min.js"></script>
+    <script src="../bower_components/ngDialog/ngDialog.js"></script>
+    <script type="text/javascript" src="startMachineEva.js?ver=2.7.0"></script>
+    <script type="text/javascript" src="../service/paperService.js?ver=1.4.9"></script>
+    <script type="text/javascript" src="../service/utilService.js?ver=1.4.9"></script>
+    <script type="text/javascript" src="../bower_components/angular-cookies/angular-cookies.min.js"></script>
+</head>
+<body ng-app="machineEvaApp" ng-controller="machineEvaController">
+<section class="signPage">
+    <header class="sub-header clearfix navbar-fixed-top">
+        <div class='pull-left' ng-show="isPaperPage">已提交：<span ng-bind="answeredNum || 0" class="text-orange"></span>/<span ng-bind="examsNum || 0"></span></div>
+        <div class="timer">
+            <span class="clock"></span>
+            <span>倒计时</span>
+            <span ng-bind="totalTime | secondToMinute"></span>
+        </div>
+        <div class="pull-right btn-drakgreen" ng-show="isPaperPage" ng-click="checkSubmit()">交卷</div>
+        <div class="pull-right btn-drakgreen" ng-click="history.go(-1)">返回</div>
+    </header>
+    <article class="content" ng-show="isPaperPage" style="height: 100%">
+        <div class = "question-box">
+            <div class="inner-tag curQstNo" ng-bind="curQstNo"></div>
+            <div class="question-content">
+                <div class="tag-content clearfix">
+                    <p class="father-qst" ng-bind-html="curQst.father && curQst.father.title | trustHtml" ng-show="curQst.father && curQst.father.title"></p>
+                    <p class="qst" ng-bind-html="curQst.title | trustHtml"></p>
+                </div>
+                <div class="options clearfix" ng-class="{'style-1': curQst.ShowType.id==='0',
+                                'style-2': curQst.ShowType.id==='1','style-3': curQst.ShowType.id==='2',}"
+                     ng-show="curQst.OptionOne && curQst.OptionOne.trim()!==''">
+                    <div class="option" ng-show="curQst.OptionOne && curQst.OptionOne.trim()!==''">
+                        <div class="btn-border clearfix" ng-click = "seekUTime('A')" ng-class="choosenA ? 'stu-choosen' : 'stu-unchoose'">
+                            <span>A、</span><div class="inline-box" ng-bind-html="curQst.OptionOne | trustHtml"></div>
+                        </div>
+                    </div>
+                    <div class="btn-option option" ng-show="curQst.OptionTwo && curQst.OptionTwo.trim()!==''">
+                        <div class="btn-border clearfix" ng-click = "seekUTime('B')" ng-class="choosenB ? 'stu-choosen' : 'stu-unchoose'">
+                            <span>B、</span><div class="inline-box" ng-bind-html="curQst.OptionTwo | trustHtml"></div>
+                        </div>
+                    </div>
+                    <div class="btn-option option" ng-show="curQst.OptionThree && curQst.OptionThree.trim()!==''">
+                        <div class="btn-border clearfix" ng-click = "seekUTime('C')" ng-class="choosenC ? 'stu-choosen' : 'stu-unchoose'">
+                            <span>C、</span><div class="inline-box" ng-bind-html="curQst.OptionThree | trustHtml"></div>
+                        </div>
+                    </div>
+                    <div class="btn-option option" ng-show="curQst.OptionFour && curQst.OptionFour.trim()!==''">
+                        <div class="btn-border clearfix" ng-click = "seekUTime('D')" ng-class="choosenD ? 'stu-choosen' : 'stu-unchoose'">
+                            <span>D、</span><div class="inline-box" ng-bind-html="curQst.OptionFour | trustHtml"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="no-option-hack clearfix" ng-show="curQst.isObjective === '1' && (!curQst.OptionOne || curQst.OptionOne.trim()==='')">
+                    <div class="btn-option" ng-click = "seekUTime('A')" ng-class="choosenA ? 'stu-choosen' : 'stu-unchoose'">A</div>
+                    <div class="btn-option" ng-click = "seekUTime('B')" ng-class="choosenB ? 'stu-choosen' : 'stu-unchoose'">B</div>
+                    <div class="btn-option" ng-click = "seekUTime('C')" ng-class="choosenC ? 'stu-choosen' : 'stu-unchoose'">C</div>
+                    <div class="btn-option" ng-click = "seekUTime('D')" ng-class="choosenD ? 'stu-choosen' : 'stu-unchoose'">D</div>
+                </div>
+            </div>
+        </div>
+        <div class="hollow pull-left col-lg-12">
+            <div ng-repeat="item in curQst.tempBlankAnswer" class="col-lg-4"> {{$index+1}}、<input type="text" ng-model="item.answer" style="border:none; border-bottom: 1px solid #000"></div></div>
+        <!--<input type="text" ng-model="item.answer" placeholder="第{{$index+1}}空">-->
+        </div>
+        <div class="navbar-fixed-bottom" style="text-align: center">
+            <div class="flip-box">
+                <div class="btn pre btn-51-green" ng-class="{disabled : curQstNo === 1}" ng-click="preQst()">上一题</div>
+                <div class="btn next"  ng-bind="(curIndex+1) === examsNum ? '交卷' : '下一题'" ng-click="nextQst()" ng-class="(curIndex+1) === examsNum ? 'btn-51-orange' : 'btn-51-green'"></div>
+            </div>
+            <div class="col-sm-25 fastQstBox" style="margin-bottom: 1%;">
+                <button style="padding:0;" ng-click="fastLink2Qst(qstList.orders,$index)" ng-repeat="qstList in questionsData"  type="button" class="fastNumList" ng-class="qstList.isDone ? 'stu-done' : 'stu-undo'">
+                    <span ng-bind="(qstList.mode === 'B' ? (qstList.orders+'.'+qstList.subOrder) : qstList.orders)"></span>
+                </button>
+                <div style="clear:both;"></div>
+            </div>
+        </div>
+    </article>
+    <article ng-show="!isPaperPage" class="wait-page">
+        <div class="wait-box">
+            <div class="wait-img"></div>
+            <div class="">
+                <div class="">您的试卷已经提交，请等待收卷!</div>
+            </div>
+        </div>
+    </article>
+</section>
+</body>
+</html>

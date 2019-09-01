@@ -10,22 +10,28 @@ var vm = new Vue({
         login(auto) {
             var self = this;
             $.ajax('http://www.51jyfw.com/BootStrap/Interface/Interface0001.ashx', {
-                data: {
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify({
                     auto: '0',
                     ipaddress: '192.168.1.1',
                     psw: this.password,
                     username: this.name
+                }),
+                contentType: 'application/json',
+                crossDomain: true,
+                xhrFields: {
+                    withCredentials: true
                 },
-                'contentType': 'application/json'
             }).then(function(res) {
                 console.log(res);
-                if (res.code === 0) {
+                if (res.fid) {
                     localStorage.setItem('name', self.name);
                     localStorage.setItem('password', self.password);
                     localStorage.setItem('user', JSON.stringify(res));
-                    document.cookie = 'userId=' + res.FLnkID;
+                    document.cookie = 'userId=' + res.SelfName;
                     // 跳转列表页面
-                    location.href = './examList.html';
+                    // location.href = './examList.html';
                 } else {
                     localStorage.removeItem('name');
                     localStorage.removeItem('password');
